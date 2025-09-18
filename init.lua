@@ -98,6 +98,30 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.cmd('iabbrev @@ alexandre.glatzpro@gmail.com')
 vim.cmd('iabbrev ccopy Copyright by Alexandre Glatz, All rights reserved')
 
+-- COLORS --
+local function get_hyprland_color(color_name)
+  local hyprland_conf = os.getenv("HOME") .. "/.config/hypr/colors.conf"
+  local file = io.open(hyprland_conf, "r")
+  if not file then
+    return nil
+  end
+
+  for line in file:lines() do
+    if line:match("^$" .. color_name .. ".*") then
+      local hex_color = line:match("rgba%((%x+)ff%)")
+      if hex_color and #hex_color == 6 then
+        return "#" .. hex_color:upper()
+      end
+    end
+  end
+
+  file:close()
+  return nil
+end
+
+local primary_color = get_hyprland_color("primary") 
+local background_color = get_hyprland_color("background") 
+
 -- STATUSLINE --
 local statusline = require("statusline")
 vim.o.statusline = "%!v:lua.require'statusline'.statusline()"
@@ -107,7 +131,9 @@ vim.api.nvim_set_hl(0, "StatusLinePath", { fg = "#a9a9a9", bg = "#3a3a3a" })
 vim.api.nvim_set_hl(0, "StatusLineFile", { fg = "#ffffff", bg = "#3a3a3a", bold = true })
 vim.api.nvim_set_hl(0, "StatusLineFill", { fg = "NONE", bg = "NONE" })
 vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#a9a9a9", bg = "NONE" })
-vim.api.nvim_set_hl(0, "StatusLineEnd", { fg = "#3a3a3a", bg = "NONE" })
+vim.api.nvim_set_hl(0, "StatusLineDiv", { fg ="#3a3a3a" , bg = primary_color })
+vim.api.nvim_set_hl(0, "StatusLineBranch", { fg = background_color, bg = primary_color })
+vim.api.nvim_set_hl(0, "StatusLineEnd", { fg = primary_color, bg = "NONE" })
 
 -- HIGHLIGHTS --
 vim.api.nvim_set_hl(0, "NonText", { ctermbg = "NONE" })
