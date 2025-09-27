@@ -74,6 +74,7 @@ function M.statusline()
     " %#StatusLineDiv# ",
     " %#StatusLineBranch#",
     git_branch(),
+    " ",
     " %#StatusLineEnd#",
     " %#StatusLineFill# %=",
     " %#StatusLineInfo#",
